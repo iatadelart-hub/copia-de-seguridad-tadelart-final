@@ -162,10 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Helper to add the mandatory privacy checkbox dynamically
   const addPrivacyCheckbox = (form) => {
-    // Remove existing checkbox containers to avoid duplication
-    const existing = form.querySelector('.privacy-checkbox-wrapper, .form-group-checkbox, .form-privacy-checkbox');
-    if (existing) {
-      existing.remove();
+    // If form already has any checkbox, do NOT add another one
+    if (form.querySelector('input[type="checkbox"]')) {
+      return;
     }
     
     const wrapper = document.createElement('div');
@@ -218,38 +217,68 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.createElement('button');
     closeBtn.className = 'custom-modal-close';
     closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Cerrar');
     closeBtn.onclick = () => {
       overlay.classList.remove('active');
       setTimeout(() => overlay.remove(), 400);
     };
     
-    const msg = document.createElement('div');
-    msg.className = 'custom-modal-message';
-    msg.innerText = message;
-    
     content.appendChild(closeBtn);
     
     if (isDownload) {
       const title = document.createElement('h3');
-      title.innerText = 'Tu guía está lista';
-      title.style.marginBottom = '20px';
+      title.innerText = 'Descargar PDF';
+      title.style.fontSize = '22px';
+      title.style.color = 'var(--gold)';
       title.style.fontFamily = 'var(--font-subtitle)';
       title.style.textTransform = 'uppercase';
+      title.style.marginBottom = '15px';
       content.appendChild(title);
+      
+      const desc = document.createElement('p');
+      desc.innerText = 'Tu Guía de Precios de Reformas 2026 en Madrid está lista para descargar.';
+      desc.style.color = '#ddd';
+      desc.style.fontSize = '15px';
+      desc.style.marginBottom = '25px';
+      desc.style.lineHeight = '1.4';
+      content.appendChild(desc);
       
       const btn = document.createElement('a');
       btn.className = 'custom-modal-btn';
-      btn.innerText = 'Volver a descargar la guía';
+      btn.innerText = 'Descargar PDF';
       btn.href = 'Guia-de-Precios-2026-Madrid.pdf';
       btn.download = 'Guia-de-Precios-2026-Madrid.pdf';
+      btn.style.background = 'var(--gold)';
+      btn.style.color = '#0a0a0a';
+      btn.style.fontWeight = 'bold';
+      btn.style.padding = '14px 32px';
+      btn.style.fontSize = '15px';
+      btn.style.borderRadius = '4px';
+      btn.style.textDecoration = 'none';
+      btn.style.display = 'inline-block';
+      btn.style.textTransform = 'uppercase';
+      btn.style.boxShadow = '0 4px 15px rgba(212, 175, 55, 0.4)';
+      btn.style.border = 'none';
+      
       btn.onclick = () => {
+        // Direct download trigger
+        const a = document.createElement('a');
+        a.href = 'Guia-de-Precios-2026-Madrid.pdf';
+        a.download = 'Guia-de-Precios-2026-Madrid.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
         setTimeout(() => {
           overlay.classList.remove('active');
           setTimeout(() => overlay.remove(), 400);
-        }, 1000);
+        }, 800);
       };
       content.appendChild(btn);
     } else {
+      const msg = document.createElement('div');
+      msg.className = 'custom-modal-message';
+      msg.innerText = message;
       content.appendChild(msg);
       
       const btn = document.createElement('button');
@@ -357,15 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle submission event
     form.addEventListener('submit', (e) => {
       if (formType === 'lead') {
-        // Trigger direct file download immediately
-        const downloadLink = document.createElement('a');
-        downloadLink.href = 'Guia-de-Precios-2026-Madrid.pdf';
-        downloadLink.download = 'Guia-de-Precios-2026-Madrid.pdf';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        showCustomModal('Tu guía se está descargando automáticamente...', true);
+        showCustomModal('', true);
       } 
       else if (formType === 'candidate') {
         showCustomModal('Gracias por ponerte en contacto con nosotros, puedes adjuntar tu CV a nuestro WhatsApp.');
