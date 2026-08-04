@@ -493,6 +493,11 @@ section {
   gap: 30px;
   margin-top: 40px;
 }
+@media (min-width: 992px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 .card {
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 8px;

@@ -239,9 +239,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const btn = document.createElement('a');
       btn.className = 'custom-modal-btn';
-      btn.innerText = 'Descarga la guía gratuita';
-      btn.href = 'Guía de Precios.pdf';
-      btn.download = 'Guía de Precios.pdf';
+      btn.innerText = 'Volver a descargar la guía';
+      btn.href = 'Guia-de-Precios-2026-Madrid.pdf';
+      btn.download = 'Guia-de-Precios-2026-Madrid.pdf';
       btn.onclick = () => {
         setTimeout(() => {
           overlay.classList.remove('active');
@@ -357,7 +357,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle submission event
     form.addEventListener('submit', (e) => {
       if (formType === 'lead') {
-        showCustomModal('Tu guía se está descargando...', true);
+        // Trigger direct file download immediately
+        const downloadLink = document.createElement('a');
+        downloadLink.href = 'Guia-de-Precios-2026-Madrid.pdf';
+        downloadLink.download = 'Guia-de-Precios-2026-Madrid.pdf';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        showCustomModal('Tu guía se está descargando automáticamente...', true);
       } 
       else if (formType === 'candidate') {
         showCustomModal('Gracias por ponerte en contacto con nosotros, puedes adjuntar tu CV a nuestro WhatsApp.');
